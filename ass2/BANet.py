@@ -1,5 +1,6 @@
 import sys
 import itertools
+import numpy as np
 
 # Scale-free (Barabasi-Albert) Network generator
 if __name__ == "__main__":
@@ -17,19 +18,19 @@ if __name__ == "__main__":
     m0 = m + 1
     for net_i in range(num_nets):
         # create initial complete graph
-        nodes = [i for i in range(m0)]
-        edges = [i for i in itertools.combinations(range(m0), 2)]
+        nodes = [i for i in range(m0)]  # for efficiency, so that we won't have to create a range later on each choice
+        edges = set([i for i in itertools.combinations(range(m0), 2)])
         degrees = [m0 - 1] * m0
 
         for step in range(t):
             probabilities = [degree / sum(degrees) for degree in degrees]
-            indices = [i for i, v in enumerate(probabilities) if v >= sorted(probabilities)[-m]][:m]
+            choices = np.random.choice(nodes, m, replace=False, p=probabilities)  # nodes == indices (choices)
 
             nodes.append(nodes[-1] + 1)
-            new_edges = zip([nodes[-1]] * m, [nodes[i] for i in indices])
-            edges.extend(tuple(sorted(i)) for i in new_edges)
+            edges |= set([tuple(sorted((nodes[-1], nodes[choice]))) for choice in choices])
+
             degrees.append(m)
-            for i in indices:
+            for i in choices:
                 degrees[i] += 1
 
         # outputting
@@ -40,5 +41,3 @@ if __name__ == "__main__":
         with open('edges' + str(net_i) + 'm' + str(m) + 't' + str(t) + '.csv', 'w') as fedges:
             fedges.write('Source;Target;Weight;Type\n')
             fedges.writelines(str(edge[0]) + ';' + str(edge[1]) + ';1;Undirected\n' for edge in edges)
-# make edges set
-# unnecessary nodes list
