@@ -18,7 +18,7 @@ if __name__ == "__main__":
     for net_i in range(num_nets):
         # create initial complete graph
         nodes = [i for i in range(m0)]
-        edges = [i for i in itertools.combinations(range(m0), 2)]#make set
+        edges = [i for i in itertools.combinations(range(m0), 2)]
         degrees = [m0 - 1] * m0
 
         for step in range(t):
@@ -31,3 +31,14 @@ if __name__ == "__main__":
             degrees.append(m)
             for i in indices:
                 degrees[i] += 1
+
+        # outputting
+        with open('nodes' + str(net_i) + 'm' + str(m) + 't' + str(t) + '.csv', 'w') as fnodes:
+            fnodes.write('Id\n')
+            fnodes.writelines(str(i) + '\n' for i in nodes)
+
+        with open('edges' + str(net_i) + 'm' + str(m) + 't' + str(t) + '.csv', 'w') as fedges:
+            fedges.write('Source;Target;Weight;Type\n')
+            fedges.writelines(str(edge[0]) + ';' + str(edge[1]) + ';1;Undirected\n' for edge in edges)
+# make edges set
+# unnecessary nodes list
