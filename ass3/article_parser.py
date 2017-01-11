@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-import csv
 import itertools
 import collections
 
@@ -7,15 +6,14 @@ filename = 'Albert_Elvira.xml'
 tree = ET.parse(filename)
 root = tree.getroot()
 
-nodes = set() # autores
-edges = [] # articulos
+nodes = set()  # authors
+edges = []  # articles
 
-for i, entry in enumerate( root.findall('r') ):
+for entry in root.findall('r'):
     article = entry[0]
-    #print(i + 1, 'year', article.find('year').text, article.find('title').text)
-    article_authors = set(au.text for au in article.findall('author'))
+    article_authors = set(au.text.encode('utf-8') for au in article.findall('author'))
 
-    # connect movies
+    # connect authors
     edges.append(list(itertools.combinations(article_authors, 2)))
     nodes |= article_authors
 
@@ -29,9 +27,10 @@ counter = collections.Counter(edges)
 edges = set(edges)
 
 
+# outputting
 with open('nodes.csv', 'w') as fnodes:
     fnodes.write('Id;Label\n')
-    fnodes.writelines(str(i) + ';' + node.encode('utf-8') + '\n' for i, node in enumerate(nodes))
+    fnodes.writelines(str(i) + ';' + node + '\n' for i, node in enumerate(nodes))
 
 with open('edges.csv', 'w') as fedges:
     fedges.write('Source;Target;Weight;Type\n')
