@@ -3,6 +3,21 @@ import xml.etree.ElementTree as ET
 import itertools
 import collections
 
+# wrong author names and its correction
+fixed_names = {'Eduardo Huedo Cuesta': 'Eduardo Huedo',
+               'Victoria Lopez': 'Victoria López',
+               'Juan C. Fabero': 'Juan Carlos Fabero Jiménez',
+               'Juan Carlos Fabero': 'Juan Carlos Fabero Jiménez',
+               'Sara Roman': 'Sara Román Navarro',
+               'J. Manuel Velasco': 'José Manuel Velasco',
+               'J. J. Ruz Ortiz': 'José Jaime Ruz',
+               'David de Frutos Escrig': 'David de Frutos-Escrig',
+               'Antonio Gavilanes-Franco': 'Antonio Gavilanes',
+               'Miguel Palomino Tarjuelo': 'Miguel Palomino',
+               'Susana Bautista-Blasco': 'Susana Bautista',
+               'Carlos Leon': 'Carlos León'
+               }
+
 nodes = set()  # authors
 edges = []  # articles
 
@@ -14,7 +29,7 @@ for xml_file in os.listdir('./xml'):
 
         for entry in root.findall('r'):
             article = entry[0]
-            article_authors = set(au.text for au in article.findall('author'))
+            article_authors = set(fixed_names.get(au.text, au.text) for au in article.findall('author'))
 
             # connect authors
             edges.append(list(itertools.combinations(article_authors, 2)))
