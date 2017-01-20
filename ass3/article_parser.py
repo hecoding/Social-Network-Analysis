@@ -4,18 +4,7 @@ import itertools
 import collections
 
 # wrong author names and its correction
-fixed_names = {'Eduardo Huedo Cuesta': 'Eduardo Huedo',
-               'Victoria Lopez': 'Victoria López',
-               'Juan C. Fabero': 'Juan Carlos Fabero Jiménez',
-               'Juan Carlos Fabero': 'Juan Carlos Fabero Jiménez',
-               'Sara Roman': 'Sara Román Navarro',
-               'J. Manuel Velasco': 'José Manuel Velasco',
-               'J. J. Ruz Ortiz': 'José Jaime Ruz',
-               'David de Frutos Escrig': 'David de Frutos-Escrig',
-               'Antonio Gavilanes-Franco': 'Antonio Gavilanes',
-               'Miguel Palomino Tarjuelo': 'Miguel Palomino',
-               'Susana Bautista-Blasco': 'Susana Bautista',
-               'Carlos Leon': 'Carlos León'
+fixed_names = {'wrong name': 'good name',
                }
 
 nodes = set()  # authors
