@@ -10,19 +10,27 @@ fixed_names = {'wrong name': 'good name',
 nodes = set()  # authors
 edges = []  # articles
 
-for xml_file in os.listdir('./xml'):
-    if xml_file.endswith('.xml'):
-        filename = xml_file
-        tree = ET.parse('./xml/' + filename)
-        root = tree.getroot()
+# get directories
+departments = next(os.walk('./xml'))[1]
+prof_departments = {}
 
-        for entry in root.findall('r'):
-            article = entry[0]
-            article_authors = set(fixed_names.get(au.text, au.text) for au in article.findall('author'))
+for department in departments:
+    for xml_file in os.listdir(os.path.join('./xml', department)):
+        if xml_file.endswith('.xml'):
+            tree = ET.parse(os.path.join('./xml', department, xml_file))
+            root = tree.getroot()
 
-            # connect authors
-            edges.append(list(itertools.combinations(article_authors, 2)))
-            nodes |= article_authors
+            for entry in root.findall('r'):
+                article = entry[0]
+                article_authors = set(fixed_names.get(au.text, au.text) for au in article.findall('author'))
+
+                # connect authors
+                edges.append(list(itertools.combinations(article_authors, 2)))
+                nodes |= article_authors
+
+            # save author department
+            current_author = root.get('name')
+            prof_departments[fixed_names.get(current_author, current_author)] = department
 
 # convert set to list to have an order to set weight on edges
 nodes = list(nodes)
@@ -36,8 +44,9 @@ edges = set(edges)
 
 # outputting
 with open('nodes.csv', 'w', encoding='utf-8') as fnodes:
-    fnodes.write('Id;Label\n')
-    fnodes.writelines(str(i) + ';' + node + '\n' for i, node in enumerate(nodes))
+    fnodes.write('Id;Label;InFaculty;Department\n')
+    fnodes.writelines(str(i) + ';' + node + ';' + str(node in prof_departments) + ';' + prof_departments.get(node, '') + '\n'
+                      for i, node in enumerate(nodes))
 
 with open('edges.csv', 'w', encoding='utf-8') as fedges:
     fedges.write('Source;Target;Weight;Type\n')
