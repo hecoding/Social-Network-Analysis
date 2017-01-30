@@ -12,3 +12,6 @@ Create a parser to convert from movies and actors file to .csv format. Each node
 Create a model of a random network (Erdös-Renyi) given the number of nodes an the probability of the edges being created. Optionally the model could also generate several networks with the same parameters. The output must be csv formatted.
 ### Scale-free network
 Create a model of a scale-free network (Barabasi-Albert) given the number of links of an incoming node and the number of steps. Optionally the model could also generate several networks with the same parameters. The output must be csv formatted.
+
+## Assignment 3 (final project)
+Analysis of the coauthorship network of researchers at our faculty. The final report is not uploaded here.
